@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Prediksi Tinggi Anak</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #4a47a3;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-light: #636e72;
+            --accent-male: #3498db;
+            --accent-female: #e91e63;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 480px;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Gender Selection Styling */
+        .gender-selector {
+            display: flex;
+            gap: 15px;
+        }
+
+        .gender-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .gender-option input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .gender-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+        }
+
+        .gender-card i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        /* Active States for Gender */
+        input:checked + .gender-card.male {
+            border-color: var(--accent-male);
+            color: var(--accent-male);
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        input:checked + .gender-card.female {
+            border-color: var(--accent-female);
+            color: var(--accent-female);
+            background: rgba(233, 30, 99, 0.05);
+        }
+
+        /* Input Fields */
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary);
+        }
+
+        /* Button */
+        .btn-calculate {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+        }
+
+        .btn-calculate:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(0);
+        }
+
+        /* Result Section */
+        #result-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 16px;
+            text-align: center;
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .result-range {
+            margin-top: 5px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .disclaimer {
+            margin-top: 20px;
+            font-size: 11px;
+            color: #b2bec3;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Prediksi Tinggi Anak</h1>
+            <p>Hitung potensi tinggi badan genetik anak Anda</p>
+        </header>
+
+        <form id="heightForm">
+            <div class="form-group">
+                <label>Jenis Kelamin Anak</label>
+                <div class="gender-selector">
+                    <div class="gender-option">
+                        <input type="radio" name="gender" id="male" value="male" checked>
+                        <label for="male" class="gender-card male">
+                            <i class="fas fa-mars"></i>
+                            <span>Laki-laki</span>
+                        </label>
+                    </div>
+                    <div class="gender-option">
+                        <input type="radio" name="gender" id="female" value="female">
+                        <label for="female" class="gender-card female">
+                            <i class="fas fa-venus"></i>
+                            <span>Perempuan</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="fatherHeight">Tinggi Ayah (cm)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-ruler-vertical"></i>
+                    <input type="number" id="fatherHeight" placeholder="Contoh: 170" required min="100" max="250">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="motherHeight">Tinggi Ibu (cm)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-ruler-vertical"></i>
+                    <input type="number" id="motherHeight" placeholder="Contoh: 160" required min="100" max="250">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-calculate">
+                Hitung Sekarang <i class="fas fa-calculator" style="margin-left:8px;"></i>
+            </button>
+        </form>
+
+        <div id="result-section">
+            <div class="result-title">Estimasi Tinggi Dewasa</div>
+            <div class="result-value"><span id="predictedHeight">0</span> cm</div>
+            <div class="result-range">Rentang potensi: <span id="rangeHeight">0 - 0</span> cm</div>
+        </div>
+
+        <div class="disclaimer">
+            *Hasil ini adalah estimasi berdasarkan rumus genetik Mid-Parental Height. Nutrisi dan faktor lingkungan juga sangat berpengaruh.
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('heightForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Ambil nilai input
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const fatherHeight = parseFloat(document.getElementById('fatherHeight').value);
+            const motherHeight = parseFloat(document.getElementById('motherHeight').value);
+
+            // Validasi sederhana
+            if (isNaN(fatherHeight) || isNaN(motherHeight)) {
+                alert("Mohon masukkan angka tinggi badan yang valid.");
+                return;
+            }
+
+            let prediction = 0;
+
+            // Rumus Kalkulasi (Mid-Parental Height)
+            // Laki-laki: (Tinggi Ayah + Tinggi Ibu + 13) / 2
+            // Perempuan: (Tinggi Ayah + Tinggi Ibu - 13) / 2
+            
+            if (gender === 'male') {
+                prediction = (fatherHeight + motherHeight + 13) / 2;
+            } else {
+                prediction = (fatherHeight + motherHeight - 13) / 2;
+            }
+
+            // Margin of error sekitar +/- 8.5 cm untuk probabilitas 95%
+            const minHeight = (prediction - 8.5).toFixed(1);
+            const maxHeight = (prediction + 8.5).toFixed(1);
+            const finalPrediction = prediction.toFixed(1);
+
+            // Tampilkan Hasil
+            const resultSection = document.getElementById('result-section');
+            const predictedEl = document.getElementById('predictedHeight');
+            const rangeEl = document.getElementById('rangeHeight');
+
+            // Reset animasi
+            resultSection.style.animation = 'none';
+            resultSection.offsetHeight; /* trigger reflow */
+            resultSection.style.animation = null; 
+            
+            resultSection.style.display = 'block';
+            predictedEl.innerText = finalPrediction;
+            rangeEl.innerText = `${minHeight} - ${maxHeight}`;
+
+            // Scroll ke hasil (untuk mobile jika layar kecil)
+            resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>
